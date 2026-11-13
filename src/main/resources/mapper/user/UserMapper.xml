@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+	namespace="jp.co.sfrontier.ss3.app.user.repository.mybatis.UserMapper">
+
+	<resultMap id="userInformationMap"
+		type="jp.co.sfrontier.ss3.app.user.entity.UserInformation">
+
+		<id column="user_id" property="userId" />
+		<result column="user_name" property="userName" />
+		<result column="mail_address" property="mailAddress" />
+		<result column="password" property="password" />
+		<result column="status" property="status" />
+		<result column="create_datetime" property="createDatetime" />
+		<result column="update_datetime" property="updateDatetime" />
+		<result column="version" property="version" />
+	</resultMap>
+
+	<select id="findByUserName" parameterType="string"
+		resultMap="userInformationMap">
+		SELECT * FROM user_information_tbl
+		WHERE user_name =
+		#{userName}
+	</select>
+
+	<select id="findByMailAddress" parameterType="string"
+		resultMap="userInformationMap">
+		SELECT * FROM user_information_tbl
+		WHERE mail_address =
+		#{mailAddress}
+	</select>
+
+	<select id="findByUserNameOrMailAddress" parameterType="string"
+		resultMap="userInformationMap">
+		SELECT * FROM user_information_tbl
+		WHERE user_name =
+		#{userNameOrMailAddress}
+		OR mail_address = #{userNameOrMailAddress}
+	</select>
+
+	<!-- 指定したユーザー名の登録件数を取得する -->
+	<select id="existsByUserName" resultType="boolean">
+		SELECT CASE WHEN
+		COUNT(*) > 0 THEN TRUE ELSE FALSE END
+		FROM user_information_tbl
+		WHERE
+		user_name = #{userName}
+	</select>
+
+	<!-- 指定したメールアドレスの登録件数を取得する -->
+	<select id="existsByMailAddress" resultType="boolean">
+		SELECT CASE WHEN
+		COUNT(*) > 0 THEN TRUE ELSE FALSE END
+		FROM user_information_tbl
+		WHERE
+		mail_address = #{mailAddress}
+	</select>
+
+	<!-- ユーザーを新規登録する。 user_idはDBで自動採番するため指定しない。 passwordには、Serviceでハッシュ化した値を渡す。 -->
+	<insert id="insert">
+
+		INSERT INTO user_information_tbl (
+		user_name,
+		mail_address,
+		password,
+		status,
+		create_datetime,
+		update_datetime,
+		version
+		)
+		VALUES (
+		#{user.userName},
+		#{user.mailAddress},
+		#{user.password},
+		#{user.status},
+		CURRENT_TIMESTAMP,
+		CURRENT_TIMESTAMP,
+		1
+		)
+
+	</insert>
+
+	<!-- パスワードを変更する。 -->
+	<update id="updatePassword">
+
+		UPDATE user_information_tbl
+		SET
+		password = #{encodedPassword},
+		update_datetime = CURRENT_TIMESTAMP,
+		version = version + 1
+		WHERE
+		user_id = #{userId}
+
+	</update>
+
+</mapper>

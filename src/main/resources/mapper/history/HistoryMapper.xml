@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+	namespace="jp.co.sfrontier.ss3.app.history.repository.mybatis.HistoryMapper">
+
+	<!-- 検索結果のカラムと、表示用DTOのフィールドを対応付ける -->
+	<resultMap id="historyRowMap"
+		type="jp.co.sfrontier.ss3.app.history.dto.HistoryRow">
+
+		<result column="execute_datetime_text"
+			property="executeDatetime" />
+		<result column="game_type_name" property="gameTypeName" />
+		<result column="user_name" property="userName" />
+		<result column="opponent_name" property="opponent" />
+		<result column="result_name" property="result" />
+
+	</resultMap>
+
+	<!-- 件数取得と一覧取得で、同じ検索条件を使用する。 userIdがnullなら全ユーザー、 gameTypeIdがnullなら全ゲームを対象とする。 -->
+	<sql id="historyConditions">
+		<where>
+			<if test="userId != null">
+				AND rh.user_id = #{userId}
+			</if>
+
+			<if test="gameTypeId != null">
+				AND rh.game_type_id = #{gameTypeId.id}
+			</if>
+		</where>
+	</sql>
+
+
+  <!-- ページング -->
+  <select id="countHistoryRows" resultType="long">
+    SELECT COUNT(*)
+    FROM RESULT_HISTORY_TBL rh
+    <where>
+    <if test="userId != null">
+      AND rh.USER_ID = #{userId}
+    </if>
+    <if test="gameTypeId != null">
+      AND rh.GAME_TYPE_ID = #{gameTypeId.id}
+    </if>
+    </where>
+  </select>
+
+  <!-- ページ取得（20件ずつ） -->
+  <select id="findPage"
+    resultType="jp.co.sfrontier.ss3.app.history.dto.HistoryRow">
+    SELECT
+    TO_CHAR(rh.EXECUTE_DATETIME, 'YYYY/MM/DD HH24:MI') AS
+    executeDatetime,
+    u.USER_NAME AS userName,
+    rh.GAME_TYPE_ID AS gameTypeId,
+    gt.GAME_NAME AS gameTypeName,
+    o.USER_NAME AS opponent,
+    r.RESULT_NAME AS
+    result
+    FROM RESULT_HISTORY_TBL rh
+    INNER JOIN USER_INFORMATION_TBL u ON
+    rh.USER_ID = u.USER_ID
+    INNER JOIN USER_INFORMATION_TBL o ON rh.OPPONENT
+    = o.USER_ID
+    INNER JOIN GAME_TYPE_MST gt ON rh.GAME_TYPE_ID =
+    gt.GAME_TYPE_ID
+    INNER JOIN RESULT_MST r ON rh.RESULT_ID = r.RESULT_ID
+    <where>
+    <if test="userId != null">
+      AND rh.USER_ID = #{userId}
+    </if>
+    <if test="gameTypeId != null">
+      AND rh.GAME_TYPE_ID = #{gameTypeId.id}
+    </if>
+    </where>
+    ORDER BY rh.EXECUTE_DATETIME DESC, rh.HISTORY_ID DESC
+
+    OFFSET #{offset}
+    ROWS FETCH NEXT #{limit} ROWS ONLY
+  </select>
+
+</mapper>

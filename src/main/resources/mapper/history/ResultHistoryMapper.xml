@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+	namespace="jp.co.sfrontier.ss3.app.history.repository.mybatis.ResultHistoryMapper">
+
+	<!-- 対戦履歴を1件登録する。 idは、ResultHistoryMapperのメソッド名「insert」と一致させる。 historyは、引数に付けた@Param("history")に対応する。 
+		HISTORY_IDはDBが自動採番するため、登録項目から除外する。 -->
+	<insert id="insert">
+
+		INSERT INTO result_history_tbl (
+		user_id,
+		game_type_id,
+		result_id,
+		execute_datetime,
+		opponent,
+		user_choice,
+		create_datetime,
+		update_datetime,
+		version
+		) VALUES (
+		#{history.userId},
+		#{history.gameType.id},
+		#{history.gameResult.id},
+		#{history.executeDatetime},
+		#{history.opponentUserId},
+		#{history.userChoice},
+		#{history.createDatetime},
+		#{history.updateDatetime},
+		#{history.version}
+		)
+
+	</insert>
+
+</mapper>

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+	namespace="jp.co.sfrontier.ss3.app.user.repository.mybatis.UserInfoMapper">
+
+	<!-- 検索結果と、画面表示用DTOのフィールドを対応付ける -->
+	<resultMap id="userInfoMap"
+		type="jp.co.sfrontier.ss3.app.user.dto.UserInfoResponse">
+
+		<id column="user_id" property="userId" />
+
+		<result column="user_name" property="userName" />
+		<result column="mail_address" property="mailAddress" />
+		<result column="status" property="status" />
+		<result column="create_datetime" property="createDatetime" />
+		<result column="update_datetime" property="updateDatetime" />
+		<result column="version" property="version" />
+
+	</resultMap>
+
+	<!-- 各検索で使用する取得項目。パスワードは取得しない -->
+	<sql id="userInfoColumns">
+		user_id,
+		user_name,
+		mail_address,
+		status,
+		create_datetime,
+		update_datetime,
+		version
+	</sql>
+
+	<!-- 全ユーザーをIDの昇順で取得する -->
+	<select id="findAll" resultMap="userInfoMap">
+
+		SELECT
+		<include refid="userInfoColumns" />
+		FROM user_information_tbl
+		ORDER BY user_id
+
+	</select>
+
+	<!-- 指定したIDのユーザーを取得する -->
+	<select id="findById" resultMap="userInfoMap">
+
+		SELECT
+		<include refid="userInfoColumns" />
+		FROM user_information_tbl
+		WHERE user_id = #{id}
+
+	</select>
+
+	<!-- IDは完全一致、名前は部分一致で検索する -->
+	<select id="search" resultMap="userInfoMap">
+
+		SELECT
+		<include refid="userInfoColumns" />
+		FROM user_information_tbl
+
+		<where>
+			<if test="request.id != null">
+				AND user_id = #{request.id}
+			</if>
+
+			<if test="request.name != null and request.name != ''">
+				AND user_name LIKE ('%' || #{request.name} || '%')
+			</if>
+		</where>
+
+		ORDER BY user_id
+
+	</select>
+
+	<!-- ステータスと更新日時を更新し、バージョンを1増やす。 編集開始時のバージョンが一致する場合だけ更新することで、 別の操作による更新の上書きを防ぐ。 -->
+	<update id="updateStatus">
+
+		UPDATE user_information_tbl
+		SET
+		status = #{request.status},
+		update_datetime = CURRENT_TIMESTAMP,
+		version = version + 1
+		WHERE
+		user_id = #{request.userId}
+		AND version = #{request.version}
+
+	</update>
+
+</mapper>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>ユーザ新規登録</title>
+
+  <link rel="stylesheet" th:href="@{/css/base.css}">
+  <link rel="stylesheet" th:href="@{/css/layout.css}">
+  <link rel="stylesheet" th:href="@{/css/login.css}">
+</head>
+
+<body>
+  <div class="layout">
+    <div id="overlay" class="overlay"></div>
+
+    <main class="login-page">
+      <div class="login-box">
+        <h1>ユーザ新規登録</h1>
+
+        <!-- ユーザー名・メールアドレスの重複エラー -->
+        <p th:if="${registerError != null}" th:text="${registerError}" class="error"></p>
+
+        <form th:action="@{/register}" th:object="${registerForm}" method="post">
+
+          <!-- ユーザー名 -->
+          <div class="form-group">
+            <input type="text" th:field="*{userName}" placeholder="ユーザ名" autocomplete="username" required>
+
+            <div th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}" class="error"></div>
+          </div>
+
+          <!-- メールアドレス -->
+          <div class="form-group">
+            <input type="email" th:field="*{mailAddress}" placeholder="メールアドレス" autocomplete="email" required>
+
+            <div th:if="${#fields.hasErrors('mailAddress')}" th:errors="*{mailAddress}" class="error"></div>
+          </div>
+
+          <!-- パスワード -->
+          <div class="form-group">
+            <input type="password" th:field="*{password}" placeholder="パスワード" autocomplete="new-password" required>
+
+            <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="error"></div>
+          </div>
+
+          <button type="submit" class="btn">
+            登録してログイン
+          </button>
+        </form>
+
+        <div class="auth-button">
+          <a th:href="@{/login}" class="back-link">
+            ログイン画面に戻る
+          </a>
+        </div>
+      </div>
+    </main>
+  </div>
+</body>
+
+</html>

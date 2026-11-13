@@ -1,0 +1,85 @@
+package jp.co.sfrontier.ss3.app.history.controller;
+
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import jp.co.sfrontier.ss3.app.auth.service.LoginUserDetails;
+import jp.co.sfrontier.ss3.app.common.GameType;
+import jp.co.sfrontier.ss3.app.history.dto.HistoryPage;
+import jp.co.sfrontier.ss3.app.history.service.HistoryService;
+import lombok.RequiredArgsConstructor;
+
+/**
+ * 対戦履歴一覧画面に関するリクエストを受け付ける Controller クラス。
+ *
+ * <p>
+ * ログインユーザーの対戦履歴を取得し、ページング（20件ずつ）および
+ * ゲーム種別タブ（全件／じゃんけん／あっちむいてほい）による
+ * 絞り込みを行った結果を画面に表示する。
+ * </p>
+ *
+ * <p>
+ * 実際の検索条件の組み立てやページング処理は Service に委譲し、
+ * Controller ではリクエストパラメータの受け取りと
+ * 画面表示用データの受け渡しのみを担当する。
+ * </p>
+ */
+@Controller
+@RequiredArgsConstructor
+public class HistoryController {
+
+	private final HistoryService historyService;
+
+	/**
+	 * 対戦履歴一覧画面を表示する。
+	 *
+	 * <p>
+	 * URLパラメータで指定された tab（all / janken / acchi）および page をもとに、
+	 * 対象となる履歴をページング（1ページ20件）して取得する。
+	 * </p>
+	 *
+	 * <p>
+	 * ページング処理および総件数の取得は Service 側で行い、
+	 * Controller では画面表示に必要な情報を Model に詰める。
+	 * </p>
+	 *
+	 * @param tab  表示する履歴種別（all, janken, acchi）
+	 * @param page 表示するページ番号（1始まり）
+	 * @param model 画面表示用の Model
+	 * @return 対戦履歴一覧画面（history.html）
+	 */
+	@GetMapping("/history")
+	public String showHistory(@RequestParam(name = "tab", defaultValue = "all") String tab,
+			@RequestParam(name = "page", defaultValue = "1") int page,
+			@AuthenticationPrincipal LoginUserDetails loginUser,
+			Model model) {
+
+		//1ページあたりの表示件数
+		int size = 20;
+
+		// URLのタブ名を、Serviceへ渡すゲーム種別に変換する
+		GameType gameType = switch (tab) {
+		case "janken" -> GameType.JANKEN;
+		case "acchi" -> GameType.LOOKOVERTHERE;
+		default -> null;
+		};
+
+		HistoryPage result = historyService.findPage(loginUser, gameType, page, size);
+
+		model.addAttribute("rows", result.getRows());
+		model.addAttribute("tab", tab);
+
+		// ページング用
+		model.addAttribute("page", result.getPage());
+		model.addAttribute("size", result.getSize());
+		model.addAttribute("totalPages", result.getTotalPages());
+		model.addAttribute("totalCount", result.getTotalCount());
+
+		model.addAttribute("activeMenu", "history");
+
+		return "history/history";
+	}
+}
