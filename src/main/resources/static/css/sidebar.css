@@ -20,18 +20,17 @@
   top: 0;
   left: 0;
   z-index: 1000;
-
+  display: flex;
+  flex-direction: column;
   box-sizing: border-box;
   width: 240px;
   height: 100vh;
   padding: 16px;
   overflow-y: auto;
-
   background: #fff;
   border-right: 1px solid #ddd;
   color: #333;
   font-family: "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
-
   transform: translateX(-100%);
   transition: transform 0.3s ease;
 }
@@ -42,8 +41,8 @@ body.sidebar-open #sidebar {
 
 /* ユーザー表示 */
 #sidebar .sidebar-user {
-  font-size: 14px;
-  margin-bottom: 16px;
+  font-size: 20px;
+  margin-bottom: 6px;
 }
 
 /* メニュー一覧 */
@@ -51,7 +50,11 @@ body.sidebar-open #sidebar {
   list-style: none;
   padding: 0;
   margin: 0;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
 }
+
 
 #sidebar .sidebar-menu li {
   margin-bottom: 8px;
@@ -61,12 +64,18 @@ body.sidebar-open #sidebar {
   display: block;
   padding: 8px 12px;
   border-radius: 6px;
-
   color: #333;
   text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-#sidebar .sidebar-menu li.active a,
+#sidebar .sidebar-menu li.active a {
+  background-color: rgb(226, 226, 226);
+  color: #333;
+}
+
 #sidebar .sidebar-menu a:hover {
   background-color: #4a90e2;
   color: #fff;
@@ -89,9 +98,8 @@ body.sidebar-open #overlay {
   pointer-events: auto;
 }
 
-/* ログアウト：配置変更は今後のTODOとして残す */
 #sidebar .logout-item {
-  margin-top: 16px;
+  margin-top: auto;
 }
 
 #sidebar .logout-button {
@@ -99,15 +107,37 @@ body.sidebar-open #overlay {
   padding: 8px 12px;
   border: none;
   border-radius: 6px;
-
   background-color: #f8d7da;
   color: #842029;
-  font-size: 14px;
+  font-size: 16px;
   text-align: left;
   cursor: pointer;
+  display: flex;
+  gap:8px;
+}
+
+#sidebar .logout-button span {
+  transform: translateY(-2px);
 }
 
 #sidebar .logout-button:hover {
   background-color: #dc3545;
   color: #fff;
+}
+
+#sidebar hr {
+  margin-inline-start: 0;
+  margin-inline-end: 0;
+}
+
+#sidebar .sidebar-icon {
+  height: 20px;
+  width: 20px;
+  transform: translateY(-1px);
+}
+
+#sidebar .logout-icon {
+  height: 20px;
+  width: 20px;
+  transform: translateY(1px);
 }

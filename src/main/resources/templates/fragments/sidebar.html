@@ -26,26 +26,99 @@
       <ul class="sidebar-menu">
 
         <li th:classappend="${activeMenu == 'home'} ? 'active'" th:if="${loginUser != null}">
-          <a th:href="@{/home}">ホーム</a>
+          <a th:href="@{/home}">
+            <!--アイコン-->
+            <svg class="sidebar-icon lucide lucide-house preview-icon" xmlns="http://www.w3.org/2000/svg" width="24"
+              height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" />
+              <path
+                d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+            </svg>
+            ホーム</a>
         </li>
 
-        <li th:if="${loginUser != null}" th:classappend="${activeMenu == 'janken'} ? 'active'">
-          <a th:href="@{/janken/play}">じゃんけん</a>
+        <li th:if="${loginUser != null && isAdmin != true}" th:classappend="${activeMenu == 'janken'} ? 'active'">
+          <a th:href="@{/janken/play}">
+            <!--アイコン-->
+            <svg class="sidebar-icon lucide lucide-house preview-icon" xmlns="http://www.w3.org/2000/svg" width="24"
+              height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path
+                d="M12.035 17.012a3 3 0 0 0-3-3l-.311-.002a.72.72 0 0 1-.505-1.229l1.195-1.195A2 2 0 0 1 10.828 11H12a2 2 0 0 0 0-4H9.243a3 3 0 0 0-2.122.879l-2.707 2.707A4.83 4.83 0 0 0 3 14a8 8 0 0 0 8 8h2a8 8 0 0 0 8-8V7a2 2 0 1 0-4 0v2a2 2 0 1 0 4 0" />
+              <path d="M13.888 9.662A2 2 0 0 0 17 8V5A2 2 0 1 0 13 5" />
+              <path d="M9 5A2 2 0 1 0 5 5V10" />
+              <path d="M9 7V4A2 2 0 1 1 13 4V7.268" />
+            </svg>
+            じゃんけん</a>
         </li>
 
-        <li th:if="${loginUser != null}" th:classappend="${activeMenu == 'lookoverthere'} ? 'active'">
-          <a th:href="@{/lookoverthere/play}">あっちむいてほい</a>
+        <li th:if="${loginUser != null && isAdmin != true}"
+          th:classappend="${activeMenu == 'lookoverthere'} ? 'active'">
+          <a th:href="@{/lookoverthere/play}">
+            <!--アイコン-->
+            <svg class="sidebar-icon lucide lucide-house preview-icon" xmlns="http://www.w3.org/2000/svg" width="24"
+              height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path
+                d="M9 19a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-6a1 1 0 0 1 1-1h3.293a.707.707 0 0 0 .5-1.207l-7.086-7.086a1 1 0 0 0-1.414 0l-7.086 7.086a.707.707 0 0 0 .5 1.207H8a1 1 0 0 1 1 1z" />
+            </svg>
+            あっちむいてほい</a>
+        </li>
+
+        <li th:if="${loginUser != null && isAdmin != true}" th:classappend="${activeMenu == 'highlow'} ? 'active'">
+          <a th:href="@{/highlow/play}">
+            <!--アイコン-->
+            <svg class="sidebar-icon lucide lucide-house preview-icon" xmlns="http://www.w3.org/2000/svg" width="24"
+              height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path
+                d="M14.832 8.445a1 1 0 00-1.589-.098l-2.075 3.098a1 1 0 000 1.11l2 3a1 1 0 001.664 0l2-3a1 1 0 000-1.11z" />
+              <path d="m7.18 20.827-5-11a2 2 0 01.993-2.647L7 5.44" />
+              <rect x="7" y="2" width="14" height="20" rx="2" />
+            </svg>High&Low</a>
+        </li>
+
+        <li th:if="${isAdmin == true}" th:classappend="${activeMenu == 'user'} ? 'active'">
+          <a th:href="@{/user/list}">
+            <!--アイコン-->
+            <svg class="sidebar-icon lucide lucide-house preview-icon" xmlns="http://www.w3.org/2000/svg" width="24"
+              height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <circle cx="12" cy="8" r="5" />
+              <path d="M20 21a8 8 0 0 0-16 0" />
+            </svg>
+            ユーザー管理</a>
         </li>
 
         <li th:if="${loginUser != null}" th:classappend="${activeMenu == 'history'} ? 'active'">
-          <a th:href="@{/history}">対戦履歴</a>
+          <a th:href="@{/history}">
+            <!--アイコン-->
+            <svg class="sidebar-icon lucide lucide-house preview-icon" xmlns="http://www.w3.org/2000/svg" width="24"
+              height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+              <path d="M3 3v5h5" />
+              <path d="M12 7v5l4 2" />
+            </svg>
+            対戦履歴</a>
         </li>
 
         <li class="logout-item" th:if="${loginUser != null}">
           <form th:action="@{/logout}" method="post" style="display:inline;">
             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
             <button class="logout-button" type="submit" onclick="return confirm('ログアウトしますか？')">
-              ログアウト
+              <!--アイコン-->
+              <svg class="logout-icon lucide lucide-house preview-icon" xmlns="http://www.w3.org/2000/svg" width="24"
+                height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12.353 21H5a2 2 0 01-2-2v-9a2 2 0 01.709-1.528l7-6a2 2 0 012.582 0l7 6A2 2 0 0121 10v2.344" />
+                <path d="M14.87 12.508A1 1 0 0014 12h-4a1 1 0 00-1 1v8" />
+                <path d="m17.999 21 3-3h-6" />
+                <path d="m20.999 18-3-3" />
+              </svg>
+              <span>ログアウト</span>
             </button>
           </form>
         </li>

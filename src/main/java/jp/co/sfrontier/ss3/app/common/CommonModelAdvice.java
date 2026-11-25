@@ -30,4 +30,21 @@ public class CommonModelAdvice {
 		return loginUser.getUser();
 	}
 
+	/**
+	 * ログインユーザーが管理者かどうかを判定する
+	 * 
+	 * @param loginUser ログインユーザー情報
+	 * @return true 管理者ならtrue、未ログインまたは管理者以外ならfalse
+	 */
+	@ModelAttribute("isAdmin")
+	public boolean isAdmin(@AuthenticationPrincipal LoginUserDetails loginUser) {
+
+		if (loginUser == null) {
+			return false;
+		}
+
+		// 権限を格納するコレクションに管理者権限が含まれていればtrueを返す
+		return loginUser.getAuthorities().stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_ADMIN"));
+	}
+
 }
