@@ -34,7 +34,8 @@ public class UserInfoController {
 
 		model.addAttribute("userlist", userList);
 		model.addAttribute("userSearchRequest", new UserSearchRequest());
-
+		model.addAttribute("activeMenu", "user");
+		
 		return "user/search";
 	}
 	

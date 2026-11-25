@@ -2,6 +2,7 @@ package jp.co.sfrontier.ss3.app.game.janken.controller;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,15 +27,16 @@ public class JankenController {
 
 	private final JankenService service;
 
-
 	/**
 	 * 対戦画面を表示する
 	 * @return 画面テンプレート名
 	 */
 	@GetMapping("/play")
-	public String show() {
+	public String show(Model model) {
 
 		log.debug("Game Start");
+
+		model.addAttribute("activeMenu", "janken");
 
 		return "janken/play";
 	}
@@ -48,12 +50,12 @@ public class JankenController {
 	 */
 	@PostMapping("/play")
 	@ResponseBody
-	public JankenResult play(@RequestParam("hand") Hand playerHand, @AuthenticationPrincipal LoginUserDetails loginUser) {
+	public JankenResult play(@RequestParam("hand") Hand playerHand,
+			@AuthenticationPrincipal LoginUserDetails loginUser) {
 
-		
 		// ログイン情報からプレイヤーのIDを取得する
-	    Long playerId = loginUser.getUser().getUserId();
+		Long playerId = loginUser.getUser().getUserId();
 
-		return service.play(playerId,playerHand);
+		return service.play(playerId, playerHand);
 	}
 }

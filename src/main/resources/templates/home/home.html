@@ -7,17 +7,22 @@
   <title>ホーム</title>
   <link rel="icon" th:href="@{/logo.png}" type="image/png">
   <link rel="stylesheet" th:href="@{/css/base.css}">
+  <link rel="stylesheet" th:href="@{/css/layout.css}">
   <link rel="stylesheet" th:href="@{/css/menu.css}">
+  <link rel="stylesheet" th:href="@{/css/sidebar.css}">
 </head>
 
 
 <body>
+  <div id="overlay" class="overlay"></div>
+  <div th:replace="fragments/sidebar :: sidebar"></div>
 
   <div class="menu-container">
     <h1>ホーム</h1>
     <div class="button-container">
       <button class="btn-game" th:onclick="|location.href='@{/janken/play}'|">じゃんけん</button>
       <button class="btn-game" th:onclick="|location.href='@{/lookoverthere/play}'|">あっちむいてほい</button>
+      <button class="btn-game" th:onclick="|location.href='@{/highlow/play}'|">High&Low</button>
       <button class="btn-option" th:onclick="|location.href='@{/history}'|">対戦履歴画面</button>
 
       <form th:action="@{/logout}" method="post">
@@ -25,6 +30,7 @@
       </form>
     </div>
   </div>
+  <script th:src="@{/js/sidebar.js}"></script>
 
 </body>
 

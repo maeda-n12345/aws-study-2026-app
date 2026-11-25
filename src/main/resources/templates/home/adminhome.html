@@ -7,19 +7,22 @@
   <title>管理者用ホーム</title>
   <link rel="icon" th:href="@{/logo.png}" type="image/png">
   <link rel="stylesheet" th:href="@{/css/base.css}">
+  <link rel="stylesheet" th:href="@{/css/layout.css}">
   <link rel="stylesheet" th:href="@{/css/menu.css}">
 </head>
 
 
 <body>
+  <div id="overlay" class="overlay"></div>
+  <div th:replace="fragments/sidebar :: sidebar"></div>
   <div class="menu-container">
     <h1>管理者用ホーム</h1>
     <div class="button-container">
       <!-- 管理者用履歴画面 -->
-      <button class="btn-option" th:onclick="|location.href='@{/history}'|">管理者用履歴画面</button>
+      <button class="btn-option" th:onclick="|location.href='@{/history}'|">管理者用履歴</button>
 
       <!-- 管理画面 -->
-      <button class="btn-option" th:onclick="|location.href='@{/user/list}'|">管理画面</button>
+      <button class="btn-option" th:onclick="|location.href='@{/user/list}'|">ユーザー管理</button>
 
       <!-- ログアウト -->
       <form th:action="@{/logout}" method="post">
@@ -27,6 +30,7 @@
       </form>
     </div>
   </div>
+  <script th:src="@{/js/sidebar.js}"></script>
 
 </body>
 

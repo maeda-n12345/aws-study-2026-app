@@ -2,6 +2,7 @@ package jp.co.sfrontier.ss3.app.game.lookoverthere.controller;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,9 +32,11 @@ public class LookOverThereController {
 	 * @return 画面テンプレート名
 	 */
 	@GetMapping("/play")
-	public String show() {
+	public String show(Model model) {
 
 		log.debug("Game Start");
+		
+		model.addAttribute("activeMenu", "lookoverthere");
 
 		return "lookoverthere/play";
 	}
